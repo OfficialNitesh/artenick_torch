@@ -4,6 +4,9 @@ import 'package:torch_light/torch_light.dart';
 import 'package:vibration/vibration.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+// Helper function for max
+int max(int a, int b) => a > b ? a : b;
+
 // This service controls the torch/flashlight and manages session timing
 class TorchService {
   Timer? _timer;
@@ -37,26 +40,40 @@ class TorchService {
     final flashCount = minFlashes + random.nextInt(maxFlashes - minFlashes + 1);
     final schedule = <int>[];
     
+    // Reserve last 10 seconds to ensure all flashes happen before session ends
+    final usableDuration = durationSec - 10;
+    
     // Divide session into N segments
-    final segmentLength = durationSec ~/ flashCount;
+    final segmentLength = usableDuration ~/ flashCount;
     
     for (int i = 0; i < flashCount; i++) {
       final segmentStart = i * segmentLength;
       final segmentEnd = (i + 1) * segmentLength;
       
       // Random time within this segment
-      int randomTime = segmentStart + random.nextInt(segmentEnd - segmentStart);
+      int randomTime = segmentStart + random.nextInt(max(1, segmentEnd - segmentStart));
       
       // Ensure minimum gap from previous flash
       if (schedule.isEmpty || randomTime - schedule.last >= minGapSec) {
         schedule.add(randomTime);
       } else {
         // If too close, push it forward by minimum gap
-        schedule.add(schedule.last + minGapSec);
+        int newTime = schedule.last + minGapSec;
+        // Make sure it's still within usable duration
+        if (newTime < usableDuration) {
+          schedule.add(newTime);
+        } else {
+          // If we can't fit it, adjust previous schedule
+          schedule.add(schedule.last + (minGapSec ~/ 2));
+        }
       }
     }
     
-    _totalFlashesScheduled = flashCount;
+    // IMPORTANT: Remove any flashes that would happen after the session
+    schedule.removeWhere((time) => time >= durationSec);
+    
+    _totalFlashesScheduled = schedule.length;
+    print('Generated ${schedule.length} flashes: $schedule');
     return schedule;
   }
   
