@@ -150,7 +150,7 @@ class _SessionScreenState extends State<SessionScreen> {
           });
         }
       });
-    }
+    } 
   }
 
   void _showError(String message) {
@@ -168,7 +168,7 @@ class _SessionScreenState extends State<SessionScreen> {
             child: Text('OK'),
           ),
         ],
-      ),
+      ),h
     );
   }
 
@@ -199,7 +199,7 @@ class _SessionScreenState extends State<SessionScreen> {
       return _buildNormalMode();
     }
   }
-
+   // not necessary 
   Widget _buildHeadlessMode() {
     return Scaffold(
       backgroundColor: Colors.black,

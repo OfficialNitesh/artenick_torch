@@ -1,28 +1,64 @@
 import 'package:flutter/material.dart';
 import '../models/challenge.dart';
+import '../services/database_service.dart';
 
 // Results screen after session completion
 class ResultsScreen extends StatefulWidget {
   final SessionRecord session;
 
-  const ResultsScreen({super.key, required this.session});
+  const ResultsScreen({required this.session});
 
   @override
   _ResultsScreenState createState() => _ResultsScreenState();
 }
 
 class _ResultsScreenState extends State<ResultsScreen> {
+  final DatabaseService _db = DatabaseService();
   final TextEditingController _countController = TextEditingController();
   bool _showComparison = false;
   int? _userCount;
+  bool _isSaved = false;
 
-  void _compareCount() {
+  @override
+  void initState() {
+    super.initState();
+    // Auto-save session to database
+    _saveSession();
+  }
+
+  Future<void> _saveSession() async {
+    try {
+      await _db.saveSession(widget.session);
+      setState(() => _isSaved = true);
+    } catch (e) {
+      print('Error saving session: $e');
+    }
+  }
+
+  void _compareCount() async {
     final count = int.tryParse(_countController.text);
     if (count != null) {
       setState(() {
         _userCount = count;
         _showComparison = true;
       });
+      
+      // Update session with user count
+      final updatedSession = SessionRecord(
+        challengeId: widget.session.challengeId,
+        challengeTitle: widget.session.challengeTitle,
+        startTime: widget.session.startTime,
+        endTime: widget.session.endTime,
+        configuredDuration: widget.session.configuredDuration,
+        actualDuration: widget.session.actualDuration,
+        totalFlashesScheduled: widget.session.totalFlashesScheduled,
+        flashCount: widget.session.flashCount,
+        flashTimes: widget.session.flashTimes,
+        completed: widget.session.completed,
+        userFlashCount: count,
+      );
+      
+      await _db.saveSession(updatedSession);
     }
   }
 
@@ -40,11 +76,11 @@ class _ResultsScreenState extends State<ResultsScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Session Results'),
+          title: Text('Session Results'),
           automaticallyImplyLeading: false,
         ),
         body: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -52,7 +88,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
             ),
           ),
           child: ListView(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             children: [
               // Status icon
               Center(
@@ -70,19 +106,19 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // Title
               Text(
                 widget.session.completed ? 'Session Completed' : 'Session Aborted',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 widget.session.challengeTitle,
                 style: TextStyle(
@@ -91,7 +127,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
               // Stats
               Row(
@@ -103,7 +139,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       value: '${widget.session.actualDuration.toStringAsFixed(1)}m',
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: _buildStatCard(
                       icon: Icons.flashlight_on,
@@ -113,7 +149,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(
@@ -123,7 +159,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       value: '${widget.session.totalFlashesScheduled}',
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: _buildStatCard(
                       icon: Icons.access_time,
@@ -133,7 +169,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
               // Memory test
               if (widget.session.completed) ...[
@@ -141,18 +177,18 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   color: Colors.purple[900]!.withOpacity(0.3),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: const BorderSide(color: Colors.purple),
+                    side: BorderSide(color: Colors.purple),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: EdgeInsets.all(20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
                             Icon(Icons.psychology, color: Colors.purple[300]),
-                            const SizedBox(width: 12),
-                            const Text(
+                            SizedBox(width: 12),
+                            Text(
                               '🧠 Memory Test',
                               style: TextStyle(
                                 fontSize: 22,
@@ -161,7 +197,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                         Text(
                           'How many flashes did you count mentally during the session?',
                           style: TextStyle(
@@ -169,7 +205,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             color: Colors.grey[300],
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                         
                         Row(
                           children: [
@@ -178,31 +214,31 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                 controller: _countController,
                                 keyboardType: TextInputType.number,
                                 enabled: !_showComparison,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   labelText: 'Your count',
                                   border: OutlineInputBorder(),
                                   filled: true,
                                   fillColor: Colors.black38,
                                 ),
-                                style: const TextStyle(fontSize: 18, fontFamily: 'monospace'),
+                                style: TextStyle(fontSize: 18, fontFamily: 'monospace'),
                               ),
                             ),
-                            const SizedBox(width: 12),
+                            SizedBox(width: 12),
                             ElevatedButton(
                               onPressed: _showComparison ? null : _compareCount,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.purple,
-                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                               ),
-                              child: const Text('Compare'),
+                              child: Text('Compare'),
                             ),
                           ],
                         ),
 
                         if (_showComparison) ...[
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20),
                           Container(
-                            padding: const EdgeInsets.all(16),
+                            padding: EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: _isCorrect
                                   ? Colors.green[900]!.withOpacity(0.4)
@@ -217,9 +253,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
                               children: [
                                 Text(
                                   _isCorrect ? '✅' : '❌',
-                                  style: const TextStyle(fontSize: 32),
+                                  style: TextStyle(fontSize: 32),
                                 ),
-                                const SizedBox(height: 8),
+                                SizedBox(height: 8),
                                 Text(
                                   _isCorrect
                                       ? 'Perfect Memory!'
@@ -230,18 +266,18 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                     color: _isCorrect ? Colors.green[300] : Colors.red[300],
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                SizedBox(height: 8),
                                 Text(
                                   _isCorrect
                                       ? 'You counted exactly ${widget.session.totalFlashesScheduled} flashes. Exceptional focus and discipline.'
                                       : 'You counted $_userCount, but there were ${widget.session.totalFlashesScheduled} flashes. Difference: $_difference ${_difference == 1 ? 'flash' : 'flashes'}.',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
                                   ),
                                 ),
                                 if (!_isCorrect) ...[
-                                  const SizedBox(height: 8),
+                                  SizedBox(height: 8),
                                   Text(
                                     'This is normal during intense focus. Practice improves attention and memory under stress.',
                                     style: TextStyle(
@@ -258,7 +294,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
               ],
 
               // Return button
@@ -267,15 +303,15 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   Navigator.of(context).popUntil((route) => route.isFirst);
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  padding: EdgeInsets.symmetric(vertical: 20),
                   backgroundColor: Colors.orange,
                 ),
-                child: const Text(
+                child: Text(
                   'Return to Challenges',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
             ],
           ),
         ),
@@ -290,20 +326,20 @@ class _ResultsScreenState extends State<ResultsScreen> {
   }) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           children: [
             Icon(icon, color: Colors.orange, size: 28),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.orange,
               ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(

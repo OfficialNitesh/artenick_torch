@@ -4,9 +4,6 @@ import 'package:torch_light/torch_light.dart';
 import 'package:vibration/vibration.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-// Helper function for max
-int max(int a, int b) => a > b ? a : b;
-
 // This service controls the torch/flashlight and manages session timing
 class TorchService {
   Timer? _timer;
@@ -34,48 +31,73 @@ class TorchService {
     }
   }
   
-  // Generate flash schedule using segment sampling algorithm
+  // Generate flash schedule - TRULY RANDOM VERSION
   List<int> _generateSchedule(int durationSec, int minFlashes, int maxFlashes, int minGapSec) {
     final random = Random();
-    final flashCount = minFlashes + random.nextInt(maxFlashes - minFlashes + 1);
+    
+    // Pick random number between min and max
+    int targetFlashes = minFlashes + random.nextInt(maxFlashes - minFlashes + 1);
+    
+    print('🎯 Target flashes: $targetFlashes for $durationSec seconds');
+    
+    // Reserve 5 seconds at start and end
+    final startPadding = 5;
+    final endPadding = 5;
+    final usableDuration = durationSec - startPadding - endPadding;
+    
+    // Calculate minimum possible gap
+    final minPossibleGap = (usableDuration / targetFlashes).floor();
+    int adjustedMinGap = minGapSec;
+    if (minGapSec * targetFlashes > usableDuration) {
+      adjustedMinGap = max(minPossibleGap, 5); // At least 5 seconds
+      print('⚠️ Min gap adjusted to ${adjustedMinGap}s');
+    }
+    
     final schedule = <int>[];
     
-    // Reserve last 10 seconds to ensure all flashes happen before session ends
-    final usableDuration = durationSec - 10;
+    // TRULY RANDOM: Generate completely random times
+    final possibleTimes = <int>[];
+    for (int t = startPadding; t < (durationSec - endPadding); t++) {
+      possibleTimes.add(t);
+    }
     
-    // Divide session into N segments
-    final segmentLength = usableDuration ~/ flashCount;
+    // Shuffle all possible times
+    possibleTimes.shuffle(random);
     
-    for (int i = 0; i < flashCount; i++) {
-      final segmentStart = i * segmentLength;
-      final segmentEnd = (i + 1) * segmentLength;
-      
-      // Random time within this segment
-      int randomTime = segmentStart + random.nextInt(max(1, segmentEnd - segmentStart));
-      
-      // Ensure minimum gap from previous flash
-      if (schedule.isEmpty || randomTime - schedule.last >= minGapSec) {
-        schedule.add(randomTime);
+    // Pick flashes ensuring minimum gap
+    for (int time in possibleTimes) {
+      if (schedule.isEmpty) {
+        schedule.add(time);
       } else {
-        // If too close, push it forward by minimum gap
-        int newTime = schedule.last + minGapSec;
-        // Make sure it's still within usable duration
-        if (newTime < usableDuration) {
-          schedule.add(newTime);
-        } else {
-          // If we can't fit it, adjust previous schedule
-          schedule.add(schedule.last + (minGapSec ~/ 2));
+        // Check if this time is far enough from all previous flashes
+        bool validTime = true;
+        for (int prevTime in schedule) {
+          if ((time - prevTime).abs() < adjustedMinGap) {
+            validTime = false;
+            break;
+          }
         }
+        if (validTime) {
+          schedule.add(time);
+        }
+      }
+      
+      // Stop when we have enough flashes
+      if (schedule.length >= targetFlashes) {
+        break;
       }
     }
     
-    // IMPORTANT: Remove any flashes that would happen after the session
-    schedule.removeWhere((time) => time >= durationSec);
+    // Sort chronologically for easier checking
+    schedule.sort();
     
     _totalFlashesScheduled = schedule.length;
-    print('Generated ${schedule.length} flashes: $schedule');
+    print('✅ Scheduled ${schedule.length} RANDOM flashes at: $schedule');
+    
     return schedule;
   }
+  
+  int max(int a, int b) => a > b ? a : b;
   
   // Start a session
   Future<void> startSession({
@@ -92,6 +114,9 @@ class TorchService {
     // Generate flash schedule
     final durationSec = durationMin * 60;
     final minGapSec = minGapMin * 60;
+    
+    print('\n🚀 Starting session: $durationMin min, $minFlashes-$maxFlashes flashes, min gap: $minGapMin min');
+    
     _flashSchedule = _generateSchedule(durationSec, minFlashes, maxFlashes, minGapSec);
     
     _isRunning = true;
@@ -99,8 +124,6 @@ class TorchService {
     _secondsElapsed = 0;
     _flashCount = 0;
     _flashTimes = [];
-    
-    print('Session started: $durationMin min, ${_flashSchedule.length} flashes scheduled');
     
     // Start countdown timer (ticks every second)
     _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
@@ -115,6 +138,7 @@ class TorchService {
         if (_flashSchedule.contains(_secondsElapsed)) {
           _flashCount++;
           _flashTimes.add(DateTime.now());
+          print('💡 Flash #$_flashCount at ${_secondsElapsed}s');
           onFlash?.call(_flashCount);
           
           // Trigger torch flash
@@ -123,6 +147,7 @@ class TorchService {
         
         // Check if session complete
         if (_secondsElapsed >= durationSec) {
+          print('✅ Session complete: $_flashCount flashes seen, $_totalFlashesScheduled scheduled');
           await stopSession();
           onComplete?.call();
         }

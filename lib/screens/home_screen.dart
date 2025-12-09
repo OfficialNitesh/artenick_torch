@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/challenge.dart';
+import '../services/database_service.dart';
 import 'detail_screen.dart';
 import 'create_challenge_screen.dart';
+import 'history_screen.dart';
 
 // Main home screen showing all challenges
 class HomeScreen extends StatefulWidget {
@@ -10,13 +12,29 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final DatabaseService _db = DatabaseService();
   List<Challenge> challenges = [];
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    _loadChallenges();
+  }
+
+  Future<void> _loadChallenges() async {
+    setState(() => isLoading = true);
+    
     // Load default challenges
-    challenges = getDefaultChallenges();
+    final defaultChallenges = getDefaultChallenges();
+    
+    // Load custom challenges from database
+    final customChallenges = await _db.loadCustomChallenges();
+    
+    setState(() {
+      challenges = [...defaultChallenges, ...customChallenges];
+      isLoading = false;
+    });
   }
 
   void _addCustomChallenge() async {
@@ -28,20 +46,22 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     if (newChallenge != null) {
-      setState(() {
-        challenges.add(newChallenge);
-      });
+      // Save to database
+      await _db.saveChallenge(newChallenge);
+      
+      // Reload challenges
+      await _loadChallenges();
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Challenge created successfully!'),
+          content: Text('Challenge created and saved!'),
           backgroundColor: Colors.green,
         ),
       );
     }
   }
 
-  void _deleteChallenge(Challenge challenge) {
+  void _deleteChallenge(Challenge challenge) async {
     // Can only delete custom challenges (not default ones)
     final defaultIds = getDefaultChallenges().map((c) => c.id).toList();
     
@@ -66,10 +86,13 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
-              setState(() {
-                challenges.removeWhere((c) => c.id == challenge.id);
-              });
+            onPressed: () async {
+              // Delete from database
+              await _db.deleteChallenge(challenge.id);
+              
+              // Reload challenges
+              await _loadChallenges();
+              
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -99,6 +122,18 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.history),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HistoryScreen()),
+              );
+            },
+            tooltip: 'History & Stats',
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _addCustomChallenge,
@@ -118,77 +153,81 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        child: ListView(
-          padding: EdgeInsets.all(16),
-          children: [
-            // Header
-            Text(
-              'Discipline Protocols',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Rituals for discipline, practice for resilience',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[400],
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              '${challenges.length} challenges available',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.orange,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 24),
-            
-            // Warning banner
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.1),
-                border: Border.all(color: Colors.orange),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
+        child: isLoading
+            ? Center(child: CircularProgressIndicator(color: Colors.orange))
+            : ListView(
+                padding: EdgeInsets.all(16),
                 children: [
-                  Icon(Icons.info_outline, color: Colors.orange),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      'This app controls your phone\'s torch/flashlight. Ensure your device supports torch control.',
-                      style: TextStyle(color: Colors.orange[200]),
+                  // Header
+                  Text(
+                    'Discipline Protocols',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Rituals for discipline, practice for resilience',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[400],
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    '${challenges.length} challenges available',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.orange,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 24),
+                  
+                  // Warning banner
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.withOpacity(0.1),
+                      border: Border.all(color: Colors.orange),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.info_outline, color: Colors.orange),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'This app controls your phone\'s torch/flashlight. Ensure your device supports torch control.',
+                            style: TextStyle(color: Colors.orange[200]),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 24),
+                  
+                  // Challenge cards
+                  ...challenges.map((challenge) => ChallengeCard(
+                    challenge: challenge,
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailScreen(challenge: challenge),
+                        ),
+                      );
+                      // Reload to refresh any stats
+                      _loadChallenges();
+                    },
+                    onDelete: () => _deleteChallenge(challenge),
+                  )).toList(),
+                  
+                  SizedBox(height: 80), // Space for FAB
                 ],
               ),
-            ),
-            SizedBox(height: 24),
-            
-            // Challenge cards
-            ...challenges.map((challenge) => ChallengeCard(
-              challenge: challenge,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailScreen(challenge: challenge),
-                  ),
-                );
-              },
-              onDelete: () => _deleteChallenge(challenge),
-            )).toList(),
-            
-            SizedBox(height: 80), // Space for FAB
-          ],
-        ),
       ),
     );
   }
