@@ -3,6 +3,8 @@ import '../models/challenge.dart';
 
 // Screen to create custom challenges
 class CreateChallengeScreen extends StatefulWidget {
+  const CreateChallengeScreen({super.key});
+
   @override
   _CreateChallengeScreenState createState() => _CreateChallengeScreenState();
 }
@@ -79,16 +81,16 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Challenge'),
+        title: const Text('Create Challenge'),
         actions: [
           IconButton(
-            icon: Icon(Icons.check),
+            icon: const Icon(Icons.check),
             onPressed: _saveChallenge,
           ),
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -98,10 +100,10 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
         child: Form(
           key: _formKey,
           child: ListView(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             children: [
               // Title
-              Text(
+              const Text(
                 'Create New Challenge',
                 style: TextStyle(
                   fontSize: 28,
@@ -109,12 +111,12 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // Challenge Title
               TextFormField(
                 controller: _titleController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Challenge Title *',
                   hintText: 'e.g., Desert Survival Protocol',
                   border: OutlineInputBorder(),
@@ -128,12 +130,12 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Category
               TextFormField(
                 controller: _categoryController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Category *',
                   hintText: 'e.g., Endurance, Mental, Physical',
                   border: OutlineInputBorder(),
@@ -147,13 +149,13 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Description
               TextFormField(
                 controller: _descriptionController,
                 maxLines: 3,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Short Description *',
                   hintText: 'Brief overview of the challenge',
                   border: OutlineInputBorder(),
@@ -167,13 +169,13 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Detailed Rules
               TextFormField(
                 controller: _detailedRulesController,
                 maxLines: 5,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Detailed Rules (Optional)',
                   hintText: 'Position requirements, failure conditions, etc.',
                   border: OutlineInputBorder(),
@@ -181,7 +183,7 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                   fillColor: Colors.black38,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Safety Text
               TextFormField(
@@ -190,13 +192,13 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                 decoration: InputDecoration(
                   labelText: 'Safety Warning *',
                   hintText: 'Medical contraindications, risks, emergency protocol',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   filled: true,
                   fillColor: Colors.red.withOpacity(0.1),
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.red),
                   ),
-                  focusedBorder: OutlineInputBorder(
+                  focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.red, width: 2),
                   ),
                 ),
@@ -207,25 +209,25 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // Difficulty
               Card(
                 child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Difficulty Level',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       SegmentedButton<String>(
-                        segments: [
+                        segments: const [
                           ButtonSegment(value: 'Easy', label: Text('Easy')),
                           ButtonSegment(value: 'Medium', label: Text('Medium')),
                           ButtonSegment(value: 'Hard', label: Text('Hard')),
@@ -242,25 +244,25 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Duration
               Card(
                 child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             'Duration (minutes)',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(
                             '$_durationMin min',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.orange,
                               fontWeight: FontWeight.bold,
                             ),
@@ -283,32 +285,32 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Flash Configuration
               Card(
                 child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Flash Configuration',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       
                       // Min Flashes
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Min Flashes'),
+                          const Text('Min Flashes'),
                           Text(
                             '$_minFlashes',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.orange,
                               fontWeight: FontWeight.bold,
                             ),
@@ -330,16 +332,16 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                           });
                         },
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       
                       // Max Flashes
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Max Flashes'),
+                          const Text('Max Flashes'),
                           Text(
                             '$_maxFlashes',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.orange,
                               fontWeight: FontWeight.bold,
                             ),
@@ -358,16 +360,16 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                           });
                         },
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       
                       // Flash Duration
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Flash Duration (ms)'),
+                          const Text('Flash Duration (ms)'),
                           Text(
                             '$_flashMs ms',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.orange,
                               fontWeight: FontWeight.bold,
                             ),
@@ -386,16 +388,16 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                           });
                         },
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       
                       // Min Gap
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Min Gap (minutes)'),
+                          const Text('Min Gap (minutes)'),
                           Text(
                             '$_minGapMin min',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.orange,
                               fontWeight: FontWeight.bold,
                             ),
@@ -418,22 +420,22 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Alert Mode
               Card(
                 child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Alert Mode',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       SegmentedButton<String>(
-                        segments: [
+                        segments: const [
                           ButtonSegment(value: 'silent', label: Text('Silent')),
                           ButtonSegment(value: 'vibrate', label: Text('Vibrate')),
                         ],
@@ -444,36 +446,36 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                           });
                         },
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       SwitchListTile(
-                        title: Text('Headless Mode'),
-                        subtitle: Text('Hide UI during session'),
+                        title: const Text('Headless Mode'),
+                        subtitle: const Text('Hide UI during session'),
                         value: _headlessMode,
                         onChanged: (value) {
                           setState(() {
                             _headlessMode = value;
                           });
                         },
-                        activeColor: Colors.orange,
+                        activeThumbColor: Colors.orange,
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Color Selection
               Card(
                 child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Challenge Color',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Wrap(
                         spacing: 12,
                         runSpacing: 12,
@@ -497,7 +499,7 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                                 ),
                               ),
                               child: isSelected
-                                  ? Icon(Icons.check, color: Colors.white)
+                                  ? const Icon(Icons.check, color: Colors.white)
                                   : null,
                             ),
                           );
@@ -507,21 +509,21 @@ class _CreateChallengeScreenState extends State<CreateChallengeScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // Save Button
               ElevatedButton(
                 onPressed: _saveChallenge,
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   backgroundColor: Colors.orange,
                 ),
-                child: Text(
+                child: const Text(
                   'Create Challenge',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
             ],
           ),
         ),

@@ -41,8 +41,8 @@ class TorchService {
     print('🎯 Target flashes: $targetFlashes for $durationSec seconds');
     
     // Reserve 5 seconds at start and end
-    final startPadding = 5;
-    final endPadding = 5;
+    const startPadding = 5;
+    const endPadding = 5;
     final usableDuration = durationSec - startPadding - endPadding;
     
     // Calculate minimum possible gap
@@ -126,7 +126,7 @@ class TorchService {
     _flashTimes = [];
     
     // Start countdown timer (ticks every second)
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (!_isPaused && _isRunning) {
         _secondsElapsed++;
         

@@ -6,7 +6,7 @@ import '../services/database_service.dart';
 class ResultsScreen extends StatefulWidget {
   final SessionRecord session;
 
-  const ResultsScreen({required this.session});
+  const ResultsScreen({super.key, required this.session});
 
   @override
   _ResultsScreenState createState() => _ResultsScreenState();
@@ -76,11 +76,11 @@ class _ResultsScreenState extends State<ResultsScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Session Results'),
+          title: const Text('Session Results'),
           automaticallyImplyLeading: false,
         ),
         body: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -88,7 +88,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
             ),
           ),
           child: ListView(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             children: [
               // Status icon
               Center(
@@ -106,19 +106,19 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // Title
               Text(
                 widget.session.completed ? 'Session Completed' : 'Session Aborted',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 widget.session.challengeTitle,
                 style: TextStyle(
@@ -127,7 +127,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
 
               // Stats
               Row(
@@ -139,7 +139,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       value: '${widget.session.actualDuration.toStringAsFixed(1)}m',
                     ),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: _buildStatCard(
                       icon: Icons.flashlight_on,
@@ -149,7 +149,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(
@@ -159,7 +159,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       value: '${widget.session.totalFlashesScheduled}',
                     ),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: _buildStatCard(
                       icon: Icons.access_time,
@@ -169,7 +169,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
 
               // Memory test
               if (widget.session.completed) ...[
@@ -177,18 +177,18 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   color: Colors.purple[900]!.withOpacity(0.3),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: Colors.purple),
+                    side: const BorderSide(color: Colors.purple),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
                             Icon(Icons.psychology, color: Colors.purple[300]),
-                            SizedBox(width: 12),
-                            Text(
+                            const SizedBox(width: 12),
+                            const Text(
                               '🧠 Memory Test',
                               style: TextStyle(
                                 fontSize: 22,
@@ -197,7 +197,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Text(
                           'How many flashes did you count mentally during the session?',
                           style: TextStyle(
@@ -205,7 +205,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             color: Colors.grey[300],
                           ),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         
                         Row(
                           children: [
@@ -214,31 +214,31 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                 controller: _countController,
                                 keyboardType: TextInputType.number,
                                 enabled: !_showComparison,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'Your count',
                                   border: OutlineInputBorder(),
                                   filled: true,
                                   fillColor: Colors.black38,
                                 ),
-                                style: TextStyle(fontSize: 18, fontFamily: 'monospace'),
+                                style: const TextStyle(fontSize: 18, fontFamily: 'monospace'),
                               ),
                             ),
-                            SizedBox(width: 12),
+                            const SizedBox(width: 12),
                             ElevatedButton(
                               onPressed: _showComparison ? null : _compareCount,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.purple,
-                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                               ),
-                              child: Text('Compare'),
+                              child: const Text('Compare'),
                             ),
                           ],
                         ),
 
                         if (_showComparison) ...[
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Container(
-                            padding: EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: _isCorrect
                                   ? Colors.green[900]!.withOpacity(0.4)
@@ -253,9 +253,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
                               children: [
                                 Text(
                                   _isCorrect ? '✅' : '❌',
-                                  style: TextStyle(fontSize: 32),
+                                  style: const TextStyle(fontSize: 32),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(
                                   _isCorrect
                                       ? 'Perfect Memory!'
@@ -266,18 +266,18 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                     color: _isCorrect ? Colors.green[300] : Colors.red[300],
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(
                                   _isCorrect
                                       ? 'You counted exactly ${widget.session.totalFlashesScheduled} flashes. Exceptional focus and discipline.'
                                       : 'You counted $_userCount, but there were ${widget.session.totalFlashesScheduled} flashes. Difference: $_difference ${_difference == 1 ? 'flash' : 'flashes'}.',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
                                   ),
                                 ),
                                 if (!_isCorrect) ...[
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
                                   Text(
                                     'This is normal during intense focus. Practice improves attention and memory under stress.',
                                     style: TextStyle(
@@ -294,7 +294,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
               ],
 
               // Return button
@@ -303,15 +303,15 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   Navigator.of(context).popUntil((route) => route.isFirst);
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   backgroundColor: Colors.orange,
                 ),
-                child: Text(
+                child: const Text(
                   'Return to Challenges',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
             ],
           ),
         ),
@@ -326,20 +326,20 @@ class _ResultsScreenState extends State<ResultsScreen> {
   }) {
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             Icon(icon, color: Colors.orange, size: 28),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               value,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.orange,
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(

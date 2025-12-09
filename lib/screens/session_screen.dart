@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../models/challenge.dart';
 import '../services/torch_service.dart';
+import '../services/alarm_service.dart';
 import 'results_screen.dart';
 
 // Main session screen - runs the challenge
@@ -20,6 +21,7 @@ class SessionScreen extends StatefulWidget {
 
 class _SessionScreenState extends State<SessionScreen> {
   final TorchService _torchService = TorchService();
+  final AlarmService _alarmService = AlarmService();
   
   int _secondsLeft = 0;
   int _flashCount = 0;
@@ -150,7 +152,7 @@ class _SessionScreenState extends State<SessionScreen> {
           });
         }
       });
-    } 
+    }
   }
 
   void _showError(String message) {
@@ -168,7 +170,7 @@ class _SessionScreenState extends State<SessionScreen> {
             child: Text('OK'),
           ),
         ],
-      ),h
+      ),
     );
   }
 
@@ -199,7 +201,7 @@ class _SessionScreenState extends State<SessionScreen> {
       return _buildNormalMode();
     }
   }
-   // not necessary 
+
   Widget _buildHeadlessMode() {
     return Scaffold(
       backgroundColor: Colors.black,

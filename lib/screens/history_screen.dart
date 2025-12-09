@@ -5,6 +5,8 @@ import '../services/database_service.dart';
 
 // History screen showing past sessions
 class HistoryScreen extends StatefulWidget {
+  const HistoryScreen({super.key});
+
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
 }
@@ -70,18 +72,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('History & Statistics'),
+        title: const Text('History & Statistics'),
         actions: [
           if (sessions.isNotEmpty)
             IconButton(
-              icon: Icon(Icons.share),
+              icon: const Icon(Icons.share),
               onPressed: _exportCSV,
               tooltip: 'Export CSV',
             ),
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -89,25 +91,25 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ),
         ),
         child: isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : sessions.isEmpty
                 ? _buildEmptyState()
                 : ListView(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     children: [
                       // Overall statistics
                       _buildOverallStats(),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       
                       // Session list
-                      Text(
+                      const Text(
                         'Session History',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       
                       ...sessions.map((session) => _buildSessionCard(session)).toList(),
                     ],
@@ -122,12 +124,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.history, size: 80, color: Colors.grey[700]),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             'No sessions yet',
             style: TextStyle(fontSize: 24, color: Colors.grey[400]),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             'Complete a challenge to see history',
             style: TextStyle(color: Colors.grey[600]),
@@ -138,20 +140,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Widget _buildOverallStats() {
-    if (overallStats == null) return SizedBox.shrink();
+    if (overallStats == null) return const SizedBox.shrink();
     
     return Card(
       color: Colors.orange.withOpacity(0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.orange),
+        side: const BorderSide(color: Colors.orange),
       ),
       child: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               children: [
                 Icon(Icons.bar_chart, color: Colors.orange),
                 SizedBox(width: 8),
@@ -164,7 +166,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             
             Row(
               children: [
@@ -184,7 +186,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             
             Row(
               children: [
@@ -204,7 +206,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             
             Row(
               children: [
@@ -234,16 +236,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Column(
       children: [
         Icon(icon, color: Colors.orange[300], size: 32),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.orange,
           ),
         ),
-        SizedBox(height: 4),
+        const SizedBox(height: 4),
         Text(
           label,
           style: TextStyle(
@@ -261,9 +263,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
         session.userFlashCount == session.totalFlashesScheduled;
     
     return Card(
-      margin: EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -272,21 +274,21 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 Expanded(
                   child: Text(
                     session.challengeTitle,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: session.completed ? Colors.green : Colors.red,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     session.completed ? 'COMPLETED' : 'ABORTED',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -295,13 +297,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             
             Text(
               '${_formatDate(session.startTime)} at ${_formatTime(session.startTime)}',
               style: TextStyle(color: Colors.grey[400], fontSize: 12),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             
             Row(
               children: [
@@ -309,20 +311,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   Icons.timer,
                   '${session.actualDuration.toStringAsFixed(1)}m',
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 _buildSessionStat(
                   Icons.flashlight_on,
                   '${session.flashCount}/${session.totalFlashesScheduled}',
                 ),
                 if (session.userFlashCount != null) ...[
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   _buildSessionStat(
                     Icons.psychology,
                     '${session.userFlashCount}',
                     color: isAccurate ? Colors.green : Colors.orange,
                   ),
                   if (isAccurate)
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(left: 8),
                       child: Icon(Icons.check_circle, color: Colors.green, size: 16),
                     ),
@@ -340,7 +342,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 16, color: color ?? Colors.grey[500]),
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         Text(
           value,
           style: TextStyle(

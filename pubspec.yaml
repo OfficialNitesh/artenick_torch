@@ -1,5 +1,5 @@
-name: artenick_torch
-description: A torch-controlled survival challenges app
+name: artenick
+description: Torch-controlled discipline training app
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -14,7 +14,7 @@ dependencies:
   # Torch control
   torch_light: ^1.0.0
   
-  # Vibration - UPDATED VERSION
+  # Vibration
   vibration: ^2.0.0
   
   # Local database
@@ -31,11 +31,14 @@ dependencies:
   # Permissions
   permission_handler: ^11.1.0
   
-  # Audio for beeps
+  # Audio for alarm
   audioplayers: ^5.2.1
   
   # Wake lock (prevent sleep)
   wakelock_plus: ^1.2.0
+  
+  # Settings storage
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
@@ -44,3 +47,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/sounds/alarm.mp3

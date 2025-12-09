@@ -15,7 +15,7 @@
     <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
     
     <application
-        android:label="Artenick Torch"
+        android:label="Artenick" 
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         

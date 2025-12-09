@@ -4,6 +4,7 @@ import '../services/database_service.dart';
 import 'detail_screen.dart';
 import 'create_challenge_screen.dart';
 import 'history_screen.dart';
+import 'settings_screen.dart';
 
 // Main home screen showing all challenges
 class HomeScreen extends StatefulWidget {

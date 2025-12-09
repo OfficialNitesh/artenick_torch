@@ -10,7 +10,7 @@ void main() {
     DeviceOrientation.portraitUp,
   ]);
   
-  runApp(ArtenickTorchApp());
+  runApp(const ArtenickTorchApp());
 }
 
 class ArtenickTorchApp extends StatelessWidget {
