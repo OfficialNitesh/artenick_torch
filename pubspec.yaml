@@ -47,6 +47,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
+  
+  # Add audio assets
   assets:
-    - assets/sounds/alarm.mp3
+    - assets/sounds/notification.mp3

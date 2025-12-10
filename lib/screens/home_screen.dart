@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Icon(Icons.flashlight_on, color: Colors.orange),
             SizedBox(width: 8),
             Text(
-              'Artenick Torch',
+              'Artenick',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
@@ -134,6 +134,16 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             tooltip: 'History & Stats',
           ),
+          IconButton(
+      icon: Icon(Icons.settings),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SettingsScreen()),
+        );
+      },
+      tooltip: 'Settings',
+    ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(

@@ -92,7 +92,12 @@ class _SessionScreenState extends State<SessionScreen> {
     );
   }
 
-  void _completeSession() {
+  void _completeSession() async {
+    print('✅ Session completing...');
+    
+    // Play completion alarm
+    await _alarmService.playCompletionAlarm();
+    
     final session = SessionRecord(
       challengeId: widget.challenge.id,
       challengeTitle: widget.challenge.title,
@@ -190,6 +195,7 @@ class _SessionScreenState extends State<SessionScreen> {
   @override
   void dispose() {
     _torchService.dispose();
+    _alarmService.dispose();
     super.dispose();
   }
 
@@ -295,7 +301,7 @@ class _SessionScreenState extends State<SessionScreen> {
                 ),
                 SizedBox(height: 8),
                 
-                // Flash count - HIDDEN during session, shown only at end
+                // Flash count (hidden total)
                 Text(
                   'Flash $_flashCount',
                   style: TextStyle(
