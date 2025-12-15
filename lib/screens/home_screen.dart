@@ -8,6 +8,8 @@ import 'settings_screen.dart';
 
 // Main home screen showing all challenges
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -42,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final newChallenge = await Navigator.push<Challenge>(
       context,
       MaterialPageRoute(
-        builder: (context) => CreateChallengeScreen(),
+        builder: (context) => const CreateChallengeScreen(),
       ),
     );
 
@@ -54,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
       await _loadChallenges();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Challenge created and saved!'),
           backgroundColor: Colors.green,
         ),
@@ -68,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
     
     if (defaultIds.contains(challenge.id)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Cannot delete default challenges'),
           backgroundColor: Colors.red,
         ),
@@ -79,12 +81,12 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete Challenge?'),
+        title: const Text('Delete Challenge?'),
         content: Text('Are you sure you want to delete "${challenge.title}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () async {
@@ -96,13 +98,13 @@ class _HomeScreenState extends State<HomeScreen> {
               
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Challenge deleted'),
                   backgroundColor: Colors.orange,
                 ),
               );
             },
-            child: Text('Delete', style: TextStyle(color: Colors.red)),
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -113,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           children: [
             Icon(Icons.flashlight_on, color: Colors.orange),
             SizedBox(width: 8),
@@ -125,17 +127,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.history),
+            icon: const Icon(Icons.history),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HistoryScreen()),
+                MaterialPageRoute(builder: (context) => const HistoryScreen()),
               );
             },
             tooltip: 'History & Stats',
           ),
           IconButton(
-      icon: Icon(Icons.settings),
+      icon: const Icon(Icons.settings),
       onPressed: () {
         Navigator.push(
           context,
@@ -150,11 +152,11 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: _addCustomChallenge,
         backgroundColor: Colors.orange,
         foregroundColor: Colors.black,
-        icon: Icon(Icons.add),
-        label: Text('Create Challenge'),
+        icon: const Icon(Icons.add),
+        label: const Text('Create Challenge'),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -165,12 +167,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         child: isLoading
-            ? Center(child: CircularProgressIndicator(color: Colors.orange))
+            ? const Center(child: CircularProgressIndicator(color: Colors.orange))
             : ListView(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 children: [
                   // Header
-                  Text(
+                  const Text(
                     'Discipline Protocols',
                     style: TextStyle(
                       fontSize: 32,
@@ -178,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     'Rituals for discipline, practice for resilience',
                     style: TextStyle(
@@ -186,20 +188,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.grey[400],
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     '${challenges.length} challenges available',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Colors.orange,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   
                   // Warning banner
                   Container(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.orange.withOpacity(0.1),
                       border: Border.all(color: Colors.orange),
@@ -207,8 +209,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.info_outline, color: Colors.orange),
-                        SizedBox(width: 12),
+                        const Icon(Icons.info_outline, color: Colors.orange),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             'This app controls your phone\'s torch/flashlight. Ensure your device supports torch control.',
@@ -218,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   
                   // Challenge cards
                   ...challenges.map((challenge) => ChallengeCard(
@@ -236,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onDelete: () => _deleteChallenge(challenge),
                   )).toList(),
                   
-                  SizedBox(height: 80), // Space for FAB
+                  const SizedBox(height: 80), // Space for FAB
                 ],
               ),
       ),
@@ -250,7 +252,7 @@ class ChallengeCard extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onDelete;
 
-  const ChallengeCard({
+  const ChallengeCard({super.key, 
     required this.challenge,
     required this.onTap,
     required this.onDelete,
@@ -279,7 +281,7 @@ class ChallengeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(color: Colors.grey[800]!),
@@ -290,7 +292,7 @@ class ChallengeCard extends StatelessWidget {
         child: Stack(
           children: [
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -305,13 +307,13 @@ class ChallengeCard extends StatelessWidget {
                           color: Color(challenge.color),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.flashlight_on,
                           color: Colors.white,
                           size: 28,
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       // Title and category
                       Expanded(
                         child: Column(
@@ -319,13 +321,13 @@ class ChallengeCard extends StatelessWidget {
                           children: [
                             Text(
                               challenge.title,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
                             ),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Text(
                               challenge.category,
                               style: TextStyle(
@@ -338,14 +340,14 @@ class ChallengeCard extends StatelessWidget {
                       ),
                       // Difficulty badge
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: difficultyColor,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           challenge.difficulty,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
@@ -354,7 +356,7 @@ class ChallengeCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   
                   // Description
                   Text(
@@ -367,34 +369,34 @@ class ChallengeCard extends StatelessWidget {
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   
                   // Info row
                   Row(
                     children: [
                       Icon(Icons.timer, size: 16, color: Colors.grey[500]),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       Text(
-                        '${challenge.durationMin < 60 ? "${challenge.durationMin}m" : "${(challenge.durationMin / 60).toStringAsFixed(1)}h"}',
+                        challenge.durationMin < 60 ? "${challenge.durationMin}m" : "${(challenge.durationMin / 60).toStringAsFixed(1)}h",
                         style: TextStyle(color: Colors.grey[400], fontSize: 14),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       Icon(Icons.flashlight_on, size: 16, color: Colors.grey[500]),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       Text(
                         '${challenge.defaultConfig.minFlashes}-${challenge.defaultConfig.maxFlashes} flashes',
                         style: TextStyle(color: Colors.grey[400], fontSize: 14),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       if (!isDefaultChallenge)
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                             color: Colors.orange.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(color: Colors.orange),
                           ),
-                          child: Text(
+                          child: const Text(
                             'CUSTOM',
                             style: TextStyle(
                               fontSize: 10,
@@ -415,7 +417,7 @@ class ChallengeCard extends StatelessWidget {
                 top: 8,
                 right: 8,
                 child: IconButton(
-                  icon: Icon(Icons.delete_outline, color: Colors.red, size: 20),
+                  icon: const Icon(Icons.delete_outline, color: Colors.red, size: 20),
                   onPressed: onDelete,
                   style: IconButton.styleFrom(
                     backgroundColor: Colors.black54,

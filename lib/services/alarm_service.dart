@@ -79,7 +79,7 @@ class AlarmService {
       await _audioPlayer.resume();
       
       // Stop after 5 seconds
-      _alarmTimer = Timer(Duration(seconds: 5), () {
+      _alarmTimer = Timer(const Duration(seconds: 5), () {
         stopAlarm();
       });
       
@@ -110,7 +110,7 @@ class AlarmService {
       await _audioPlayer.resume();
       
       // Stop after 2 seconds
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       await stopAlarm();
       
     } catch (e) {

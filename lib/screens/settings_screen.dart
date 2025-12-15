@@ -4,6 +4,8 @@ import '../services/alarm_service.dart';
 
 // Settings screen for alarm customization
 class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({super.key});
+
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
@@ -65,10 +67,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -76,33 +78,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
         child: _isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : ListView(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 children: [
                   // Header
-                  Text(
+                  const Text(
                     'App Settings',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     'Customize your Artenick experience',
                     style: TextStyle(color: Colors.grey[400]),
                   ),
-                  SizedBox(height: 32),
+                  const SizedBox(height: 32),
 
                   // Completion Alarm Section
                   Card(
                     child: Padding(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Icon(Icons.alarm, color: Colors.orange),
                               SizedBox(width: 12),
@@ -115,7 +117,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             'Play alarm sound when session completes',
                             style: TextStyle(
@@ -123,35 +125,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               fontSize: 14,
                             ),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
 
                           // Enable/Disable Alarm
                           SwitchListTile(
-                            title: Text('Enable Completion Alarm'),
+                            title: const Text('Enable Completion Alarm'),
                             subtitle: Text(
                               _alarmEnabled 
                                   ? 'Alarm will play when timer ends'
                                   : 'No alarm will play',
-                              style: TextStyle(fontSize: 12),
+                              style: const TextStyle(fontSize: 12),
                             ),
                             value: _alarmEnabled,
                             onChanged: _updateAlarmEnabled,
-                            activeColor: Colors.orange,
+                            activeThumbColor: Colors.orange,
                           ),
 
                           if (_alarmEnabled) ...[
-                            Divider(),
-                            SizedBox(height: 16),
+                            const Divider(),
+                            const SizedBox(height: 16),
 
                             // Alarm Type Selection
-                            Text(
+                            const Text(
                               'Alarm Sound',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
                             ),
-                            SizedBox(height: 12),
+                            const SizedBox(height: 12),
 
                             ...AlarmService.alarmSounds.entries.map((entry) {
                               return RadioListTile<String>(
@@ -169,18 +171,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               );
                             }).toList(),
 
-                            Divider(),
-                            SizedBox(height: 16),
+                            const Divider(),
+                            const SizedBox(height: 16),
 
                             // Volume Control
-                            Text(
+                            const Text(
                               'Alarm Volume',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
 
                             Row(
                               children: [
@@ -195,11 +197,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     onChanged: _updateAlarmVolume,
                                   ),
                                 ),
-                                Icon(Icons.volume_up, color: Colors.orange),
-                                SizedBox(width: 8),
+                                const Icon(Icons.volume_up, color: Colors.orange),
+                                const SizedBox(width: 8),
                                 Text(
                                   '${(_alarmVolume * 100).toInt()}%',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.orange,
                                   ),
@@ -207,17 +209,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ],
                             ),
 
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
 
                             // Test Alarm Button
                             ElevatedButton.icon(
                               onPressed: () => _alarm.playPreview(_alarmType),
-                              icon: Icon(Icons.play_arrow),
-                              label: Text('Test Alarm'),
+                              icon: const Icon(Icons.play_arrow),
+                              label: const Text('Test Alarm'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.orange,
                                 foregroundColor: Colors.black,
-                                minimumSize: Size(double.infinity, 48),
+                                minimumSize: const Size(double.infinity, 48),
                               ),
                             ),
                           ],
@@ -225,16 +227,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // App Info Section
                   Card(
                     child: Padding(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Icon(Icons.info_outline, color: Colors.orange),
                               SizedBox(width: 12),
@@ -247,11 +249,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           _buildInfoRow('App Name', 'Artenick'),
                           _buildInfoRow('Version', '1.0.0'),
                           _buildInfoRow('Build', 'Release'),
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           Text(
                             'A torch-controlled discipline training app for building mental resilience and physical endurance.',
                             style: TextStyle(
@@ -272,7 +274,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -282,7 +284,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,
             ),

@@ -10,7 +10,7 @@ class SessionScreen extends StatefulWidget {
   final Challenge challenge;
   final ChallengeConfig config;
 
-  const SessionScreen({
+  const SessionScreen({super.key, 
     required this.challenge,
     required this.config,
   });
@@ -27,7 +27,7 @@ class _SessionScreenState extends State<SessionScreen> {
   int _flashCount = 0;
   bool _showPanicConfirm = false;
   DateTime? _startTime;
-  List<DateTime> _flashTimes = [];
+  final List<DateTime> _flashTimes = [];
   
   @override
   void initState() {
@@ -150,7 +150,7 @@ class _SessionScreenState extends State<SessionScreen> {
       });
       
       // Reset after 3 seconds
-      Future.delayed(Duration(seconds: 3), () {
+      Future.delayed(const Duration(seconds: 3), () {
         if (mounted) {
           setState(() {
             _showPanicConfirm = false;
@@ -164,7 +164,7 @@ class _SessionScreenState extends State<SessionScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Error'),
+        title: const Text('Error'),
         content: Text(message),
         actions: [
           TextButton(
@@ -172,7 +172,7 @@ class _SessionScreenState extends State<SessionScreen> {
               Navigator.pop(context);
               Navigator.pop(context);
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -225,7 +225,7 @@ class _SessionScreenState extends State<SessionScreen> {
                 fontFamily: 'monospace',
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               widget.challenge.title,
               style: TextStyle(
@@ -234,21 +234,21 @@ class _SessionScreenState extends State<SessionScreen> {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 60),
+            const SizedBox(height: 60),
             
             // Panic button
             ElevatedButton(
               onPressed: _handlePanic,
               style: ElevatedButton.styleFrom(
                 backgroundColor: _showPanicConfirm ? Colors.red : Colors.red[900],
-                padding: EdgeInsets.symmetric(horizontal: 48, vertical: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
               child: Text(
                 _showPanicConfirm ? 'TAP AGAIN TO ABORT' : '🚨 PANIC',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -256,7 +256,7 @@ class _SessionScreenState extends State<SessionScreen> {
               ),
             ),
             if (_showPanicConfirm) ...[
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                 'Tap again within 3 seconds to abort',
                 style: TextStyle(color: Colors.red[300], fontSize: 12),
@@ -274,21 +274,21 @@ class _SessionScreenState extends State<SessionScreen> {
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding: EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Timer
                 Text(
                   _formatTime(_secondsLeft),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 80,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontFamily: 'monospace',
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 
                 // Challenge title
                 Text(
@@ -299,7 +299,7 @@ class _SessionScreenState extends State<SessionScreen> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 
                 // Flash count (hidden total)
                 Text(
@@ -309,7 +309,7 @@ class _SessionScreenState extends State<SessionScreen> {
                     color: Colors.grey[600],
                   ),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 
                 // Progress bar
                 Container(
@@ -324,7 +324,7 @@ class _SessionScreenState extends State<SessionScreen> {
                     widthFactor: _progress,
                     child: Container(
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
+                        gradient: const LinearGradient(
                           colors: [Colors.orange, Colors.red],
                         ),
                         borderRadius: BorderRadius.circular(4),
@@ -332,7 +332,7 @@ class _SessionScreenState extends State<SessionScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 
                 // Pause button
                 ElevatedButton(
@@ -342,7 +342,7 @@ class _SessionScreenState extends State<SessionScreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey[800],
-                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -350,29 +350,29 @@ class _SessionScreenState extends State<SessionScreen> {
                       Icon(
                         _torchService.isPaused ? Icons.play_arrow : Icons.pause,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
                         _torchService.isPaused ? 'Resume' : 'Pause',
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 
                 // Panic button
                 ElevatedButton(
                   onPressed: _handlePanic,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _showPanicConfirm ? Colors.red : Colors.red[900],
-                    padding: EdgeInsets.symmetric(horizontal: 48, vertical: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                   child: Text(
                     _showPanicConfirm ? '⚠️ TAP AGAIN TO ABORT' : '🚨 PANIC STOP',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -380,7 +380,7 @@ class _SessionScreenState extends State<SessionScreen> {
                   ),
                 ),
                 if (_showPanicConfirm) ...[
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
                     'Tap again within 3 seconds to abort session',
                     style: TextStyle(color: Colors.red[300], fontSize: 12),
