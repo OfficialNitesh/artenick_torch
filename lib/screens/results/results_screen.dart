@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/challenge.dart';
 import '../services/database_service.dart';
+import '../services/user_service.dart';
 
 // Results screen after session completion
 class ResultsScreen extends StatefulWidget {
@@ -20,20 +21,20 @@ class _ResultsScreenState extends State<ResultsScreen> {
   bool _isSaved = false;
 
   @override
-  void initState() {
-    super.initState();
-    // Auto-save session to database
-    _saveSession();
-  }
+   void initState() {
+  super.initState();
+  _saveSession();
+  _recordToUser();
+     }
 
-  Future<void> _saveSession() async {
-    try {
-      await _db.saveSession(widget.session);
-      setState(() => _isSaved = true);
-    } catch (e) {
-      print('Error saving session: $e');
-    }
-  }
+   Future<void> _recordToUser() async {
+  final userService = UserService();
+  await userService.recordSession(
+    completed: widget.session.completed,
+    durationMin: widget.session.configuredDuration,
+    sessionDate: widget.session.endTime,
+  );
+}
 
   void _compareCount() async {
     final count = int.tryParse(_countController.text);
