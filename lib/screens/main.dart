@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'services/user_service.dart';
 import 'screens/onboarding/username_screen.dart';
-import 'screens/main_navigation.dart';
+import 'screens/main.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,13 +32,24 @@ class ArtenickApp extends StatelessWidget {
           color: Color(0xFF1A1A1A),
           elevation: 4,
         ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.orange,
+            foregroundColor: Colors.black,
+            textStyle: TextStyle(fontWeight: FontWeight.bold),
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
       ),
       home: FutureBuilder<bool>(
         future: UserService().hasCompletedOnboarding(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Scaffold(
-              body: Center(child: CircularProgressIndicator()),
+              body: Center(child: CircularProgressIndicator(color: Colors.orange)),
             );
           }
           
