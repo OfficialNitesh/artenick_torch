@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'screens/home_screen.dart';
+import 'screens/home/home_screen.dart';
 
 // This is the entry point of your app
 void main() {

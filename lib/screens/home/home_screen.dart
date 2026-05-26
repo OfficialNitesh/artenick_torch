@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import '../models/challenge.dart';
-import '../services/database_service.dart';
-import 'detail_screen.dart';
-import 'create_challenge_screen.dart';
-import 'history_screen.dart';
-import 'settings_screen.dart';
+import 'package:flutter/material.dart';
+
+// 1. Data and Services (starting from lib/)
+import 'package:artenick/models/challenge.dart';
+import 'package:artenick/services/database_service.dart';
+
+// 2. Screens (starting from lib/screens/)
+import 'package:artenick/screens/detail_screen.dart'; // From your screenshot, this is right under screens
+import 'package:artenick/screens/challenge/create_challenge_screen.dart'; // Assuming this is in the challenge folder
+import 'package:artenick/screens/settings/settings_screen.dart'; // Assuming this is in the settings folder
+import 'package:artenick/screens/results/results_screen.dart'; // Assuming history is in the results folder
 
 // Main home screen showing all challenges
 class HomeScreen extends StatefulWidget {
