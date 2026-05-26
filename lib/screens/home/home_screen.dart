@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 
-// 1. Data and Services (starting from lib/)
+// 1. Data and Services 
 import 'package:artenick/models/challenge.dart';
 import 'package:artenick/services/database_service.dart';
 
-// 2. Screens (starting from lib/screens/)
-import 'package:artenick/screens/detail_screen.dart'; // From your screenshot, this is right under screens
-import 'package:artenick/screens/challenge/create_challenge_screen.dart'; // Assuming this is in the challenge folder
-import 'package:artenick/screens/settings/settings_screen.dart'; // Assuming this is in the settings folder
-import 'package:artenick/screens/results/results_screen.dart'; // Assuming history is in the results folder
+// 2. Screens 
+import 'package:artenick/screens/detail_screen.dart'; 
+import 'package:artenick/screens/challenge/create_challenge_screen.dart'; 
+import 'package:artenick/screens/settings/settings_screen.dart'; 
+import 'package:artenick/screens/results/results_screen.dart'; 
 
 // Main home screen showing all challenges
 class HomeScreen extends StatefulWidget {
@@ -60,12 +59,14 @@ class _HomeScreenState extends State<HomeScreen> {
       // Reload challenges
       await _loadChallenges();
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Challenge created and saved!'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Challenge created and saved!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
     }
   }
 
@@ -101,13 +102,15 @@ class _HomeScreenState extends State<HomeScreen> {
               // Reload challenges
               await _loadChallenges();
               
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Challenge deleted'),
-                  backgroundColor: Colors.orange,
-                ),
-              );
+              if (context.mounted) {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Challenge deleted'),
+                    backgroundColor: Colors.orange,
+                  ),
+                );
+              }
             },
             child: const Text('Delete', style: TextStyle(color: Colors.red)),
           ),
@@ -136,21 +139,21 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const HistoryScreen()),
+                MaterialPageRoute(builder: (context) => const ResultsScreen()), // Fixed to match your import
               );
             },
             tooltip: 'History & Stats',
           ),
           IconButton(
-      icon: const Icon(Icons.settings),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SettingsScreen()),
-        );
-      },
-      tooltip: 'Settings',
-    ),
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingsScreen()),
+              );
+            },
+            tooltip: 'Settings',
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -257,7 +260,8 @@ class ChallengeCard extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onDelete;
 
-  const ChallengeCard({super.key, 
+  const ChallengeCard({
+    super.key, 
     required this.challenge,
     required this.onTap,
     required this.onDelete,
@@ -389,7 +393,7 @@ class ChallengeCard extends StatelessWidget {
                       Icon(Icons.flashlight_on, size: 16, color: Colors.grey[500]),
                       const SizedBox(width: 4),
                       Text(
-                        '${challenge.defaultConfig.minFlashes}-${challenge.defaultConfig.maxFlashes} flashes',
+                        '${challenge.defaultConfig?.minFlashes ?? 0}-${challenge.defaultConfig?.maxFlashes ?? 0} flashes',
                         style: TextStyle(color: Colors.grey[400], fontSize: 14),
                       ),
                       const Spacer(),
@@ -434,4 +438,11 @@ class ChallengeCard extends StatelessWidget {
       ),
     );
   }
+}
+
+// --- HELPER FUNCTION TO FIX COMPILE ERRORS ---
+// If you already have your default challenges defined somewhere else, 
+// you can delete this and import your actual file.
+List<Challenge> getDefaultChallenges() {
+  return []; 
 }
