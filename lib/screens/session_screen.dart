@@ -3,7 +3,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../models/challenge.dart';
 import '../services/torch_service.dart';
 import '../services/alarm_service.dart';
-import 'results_screen.dart';
+import 'results/results_screen.dart';
 
 // Main session screen - runs the challenge
 class SessionScreen extends StatefulWidget {

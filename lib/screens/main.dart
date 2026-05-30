@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'services/user_service.dart';
-import 'screens/onboarding/username_screen.dart';
-import 'screens/main.dart';
+import 'package:artenick/services/user_service.dart';
+import 'package:artenick/screens/onboarding/username_screen.dart';
+import 'package:artenick/screens/main.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/challenge.dart';
-import '../screens/challenge/session/torch_flash_session.dart';
-import '../screens/challenge/session/timer_only_session.dart';
+import 'package:artenick/models/challenge.dart';
+import 'package:artenick/screens/challenge/session/timer_only_session.dart';
 
 // Routes to correct session screen based on challenge type
 class ChallengeExecutor {

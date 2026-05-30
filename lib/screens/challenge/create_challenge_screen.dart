@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/challenge.dart';
+import 'package:artenick/models/challenge.dart';
 
 // Screen to create custom challenges
 class CreateChallengeScreen extends StatefulWidget {

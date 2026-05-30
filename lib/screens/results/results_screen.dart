@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/challenge.dart';
-import '../services/database_service.dart';
-import '../services/user_service.dart';
+import 'package:artenick/models/challenge.dart';
+import 'package:artenick/services/database_service.dart';
+import 'package:artenick/services/user_service.dart';
 
 // Results screen after session completion
 class ResultsScreen extends StatefulWidget {
